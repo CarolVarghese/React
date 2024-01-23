@@ -1,0 +1,20 @@
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+#Mark{
+    width: 82px;
+    
+}
+
+#Search{
+    border-width: 3px;
+    border-color: aquamarine;
+    border-style: groove;
+}
+
+select{
+    box-sizing: border-box;
+    size: 200px;
+}
