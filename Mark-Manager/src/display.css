@@ -18,3 +18,15 @@ select{
     box-sizing: border-box;
     size: 200px;
 }
+
+.pagination {
+    list-style: none;
+    height: 31.5px;
+    width: auto;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 20px;
+    margin-top: 2px;
+    cursor: pointer;
+  }
