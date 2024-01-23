@@ -155,8 +155,8 @@ const handleSearch = () => {
   }
 
   const best = studentsWithinRange.reduce((prev, current) =>
-    (prev.malayalam + prev.maths + prev.english) / 3 >
-    (current.malayalam + current.maths + current.english) / 3
+    ((prev.malayalam + prev.maths + prev.english) / 3) >
+    ((current.malayalam + current.maths + current.english) / 3)
       ? prev
       : current
   );
@@ -251,8 +251,8 @@ const handleSearch = () => {
         <div>
           <h3>Best Performing Student</h3>
           <p>Name: {bestStudent.name}</p>
-          <p>Average Marks: {Number(bestStudent.malayalam) +
-           Number(bestStudent.maths) + Number(bestStudent.english)/3 }</p>
+          <p>Average Marks: {(Number(bestStudent.malayalam) +
+           Number(bestStudent.maths) + Number(bestStudent.english))/3 }</p>
         </div>
       )}
       </div>
