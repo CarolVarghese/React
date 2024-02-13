@@ -1,9 +1,9 @@
 import './display.css'
-
+import { Line } from 'react-chartjs-2';
 import { useState, useEffect } from 'react';
 import {markDetailsModel} from './App'
 import ReactPaginate from 'react-paginate';
-
+import {Chart  as ChartJS} from 'chart.js/auto';
 
 
 interface DisplayProps {
@@ -43,6 +43,7 @@ function Display(props: DisplayProps){
     const pageCount = Math.ceil(Object.keys(storedData).length / itemsPerPage);
     useEffect(() => {
         readData();
+        setChartData(dataChart(Object.values(storedData)));
       }, []);
 
 
@@ -164,6 +165,25 @@ const handleSearch = () => {
   setBestStudent(best);
 };
 
+
+  const dataChart = (students: markDetailsModel[]) => {
+
+    const chartData = {
+      labels: students.map(student => student.name),
+      datasets: [
+        {
+          label: 'My Data',
+          data:  students.map(student => student.english),
+          backgroundColor: 'rgba(75,192,192,0.2)',
+          borderColor: 'rgba(75,192,192,1)',
+        },
+      ],
+    };
+    return chartData;
+  }
+  const [chartData, setChartData] = useState(dataChart([]));
+  
+
     return(                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
         <>
         <h2>Details</h2>
@@ -203,6 +223,8 @@ const handleSearch = () => {
         <ReactPaginate
             previousLabel={'Previous'}
             nextLabel={'Next'}
+
+            
             breakLabel={'...'}
             breakClassName={'break-me'}
             pageCount={pageCount}
@@ -255,6 +277,9 @@ const handleSearch = () => {
            Number(bestStudent.maths) + Number(bestStudent.english))/3 }</p>
         </div>
       )}
+      <div>
+      <Line data={chartData} />
+      </div>
       </div>
         </>
     )
