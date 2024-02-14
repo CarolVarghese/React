@@ -1,11 +1,11 @@
-// ParentComponent.tsx
+
 
 import App from './App.tsx';
-import DataChart from './DataChart.tsx';
+
 
 import SearchDisplay from './Search.tsx';
-// import { useState} from 'react';
-// import {markDetailsModel} from './App'
+
+
 
 function ParentComponent() {
     
