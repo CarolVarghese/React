@@ -1,6 +1,7 @@
 // ParentComponent.tsx
 
 import App from './App.tsx';
+import DataChart from './DataChart.tsx';
 
 import SearchDisplay from './Search.tsx';
 // import { useState} from 'react';
@@ -13,6 +14,8 @@ function ParentComponent() {
       <App/>
        
       <SearchDisplay />
+
+      
     </div>
   );
 }

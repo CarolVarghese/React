@@ -1,11 +1,17 @@
-import React from 'react'
+
+import React, { useEffect, useState } from 'react';
 import { UserData } from './Data'
 
 import './App.css'
 import { Bar } from 'react-chartjs-2';
+import  Chart, {CategoryScale}  from 'chart.js/auto';
+
+Chart.register(CategoryScale);
 
 function App() {
   
+  const [chartInstance, setChartInstance] = useState<Chart | null>(null);
+
      const chartData = {
       labels: UserData.map((data) => data.year),
       datasets: [
@@ -36,22 +42,27 @@ function App() {
         chartInstance.destroy();
       }
   
-      const ctx = document.getElementById('myChart').getContext('2d');
+      const ctx = document.getElementById('myChart') as HTMLCanvasElement | null;
+      if (!ctx) return null;
+
       const newChartInstance = new Chart(ctx, {
         type: 'bar',
         data: chartData,
+        options: chartOptions,
       });
   
       setChartInstance(newChartInstance);
   
-      // Cleanup on component unmount
-      return () => {
+      
+      const cleanupFunction: () => void = () => {
         if (chartInstance) {
           chartInstance.destroy();
         }
       };
-    }, [chartData]);
-    
+      return cleanupFunction;
+      
+    }, [chartData,chartOptions,chartInstance]);
+
      return(
       <div>
         <Bar data={chartData} options={chartOptions} />
