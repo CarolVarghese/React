@@ -113,17 +113,17 @@ function App() {
           </div>
           <h3>Enter Marks</h3>
           <div id='label'><label htmlFor="">Malayalam</label></div>
-          <div className='formBox mark'>
+          <div className='formBox '>
             
             <input type="number" name="malayalam" placeholder="0" onChange={handleChange} value={MarkDetails.malayalam} required/>
           </div>
           <div id='label'><label htmlFor="">Maths</label></div>
-          <div className='formBox mark'>
+          <div className='formBox '>
            
             <input type="number" name="maths" placeholder="0" onChange={handleChange} value={MarkDetails.maths} required/>
           </div>
           <div id='label'><label htmlFor="">English</label></div>
-          <div className='formBox mark'>
+          <div className='formBox '>
             
             <input id="mark" type="number" name="english" placeholder="0" onChange={handleChange} value={MarkDetails.english} required/>
           </div>
