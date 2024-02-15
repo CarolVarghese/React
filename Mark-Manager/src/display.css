@@ -1,8 +1,11 @@
 table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
+    text-align: center;
 }
-
+h1,h2,h3{
+    text-align: center;
+}
 #Mark{
     width: 82px;
     
@@ -12,9 +15,11 @@ table, th, td {
     border-width: 3px;
     border-color: aquamarine;
     border-style: groove;
+    text-align: center;
 }
 
 select{
+    text-align: center;
     box-sizing: border-box;
     size: 200px;
 }
@@ -29,4 +34,18 @@ select{
     padding: 20px;
     margin-top: 2px;
     cursor: pointer;
+    text-align: center;
+  }
+  #label{
+    width: 100%;
+    padding-left: 25%;
+    text-align: left;
+    
+  }
+  .mark{
+    text-align: left;
+    padding-left: 25%;
+  }
+  #mark{
+    
   }

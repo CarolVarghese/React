@@ -231,7 +231,7 @@ const handleSearch = () => {
               <button onClick={handleConfirm}>OK</button>
               <button onClick={handleCancel}>Cancel</button>
             </div>)}
-      <div>
+      <div className='container'>
         <h3>Select number of rows</h3>
         <select value={itemsPerPage} onChange={handleChange}>
 

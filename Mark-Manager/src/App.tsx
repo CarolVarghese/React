@@ -6,6 +6,7 @@ export  interface markDetailsModel {
   month: string;
   name: string;
   rollno: number;
+
   attendence: number;
   malayalam: number;
   maths: number;
@@ -80,8 +81,9 @@ function App() {
         <h2>Enter Details</h2>
       <div className="container"> 
         <form id="Form" onSubmit={handleSubmit} ref={formRef} >
+          <div id="label"><label >Month</label></div>
         <div className='formBox'>
-            <label >Month</label>
+            
            
             <select name="month"  value={defaultMonth} onChange={handleChange} required>
   <option value={defaultMonth} disabled selected >
@@ -94,30 +96,36 @@ function App() {
   ))}
 </select>
           </div>
+          <div id="label"><label htmlFor="">Name</label></div>
           <div className='formBox'>
-            <label htmlFor="">Name</label>
+            
             <input type="text" name="name" placeholder="Full Name" onChange={handleChange} value={MarkDetails.name} required/>
           </div>
+          <div id="label"><label htmlFor="">Roll Number</label></div>
           <div className='formBox'>
-            <label htmlFor="">Roll Number</label>
+            
             <input type="number" name="rollno"  placeholder="Roll No." onChange={handleChange} value={MarkDetails.rollno} required/>
           </div>
+          <div id="label"><label htmlFor="">Attendence</label></div>
           <div className='formBox'>
-            <label htmlFor="">Attendence</label>
+            
             <input type="number" name="attendence" min='1' max='100'  placeholder="%" onChange={handleChange} value={MarkDetails.attendence} required/>
           </div>
           <h3>Enter Marks</h3>
-          <div className='formBox'>
-            <label htmlFor="">Malayalam</label>
+          <div id='label'><label htmlFor="">Malayalam</label></div>
+          <div className='formBox mark'>
+            
             <input type="number" name="malayalam" placeholder="0" onChange={handleChange} value={MarkDetails.malayalam} required/>
           </div>
-          <div className='formBox'>
-            <label htmlFor="">Maths</label>
+          <div id='label'><label htmlFor="">Maths</label></div>
+          <div className='formBox mark'>
+           
             <input type="number" name="maths" placeholder="0" onChange={handleChange} value={MarkDetails.maths} required/>
           </div>
-          <div className='formBox'>
-            <label htmlFor="">English</label>
-            <input type="number" name="english" placeholder="0" onChange={handleChange} value={MarkDetails.english} required/>
+          <div id='label'><label htmlFor="">English</label></div>
+          <div className='formBox mark'>
+            
+            <input id="mark" type="number" name="english" placeholder="0" onChange={handleChange} value={MarkDetails.english} required/>
           </div>
           
           <div>
