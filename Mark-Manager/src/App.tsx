@@ -61,6 +61,7 @@ function App() {
   
 
       const handleEditClick = (data: markDetailsModel) => {
+        
         setIsEditing(true);
         setEditingStudent(data);
         setDetails(data);
@@ -71,6 +72,7 @@ function App() {
         "July", "August", "September", "October", "November", "December"
       ];
       
+      const defaultMonth = isEditing ? editingStudent.month : "Select a month" ;
       
   return (
 
@@ -81,9 +83,9 @@ function App() {
         <div className='formBox'>
             <label >Month</label>
            
-            <select name="month" onChange={handleChange} required>
-  <option value="" disabled selected hidden>
-    Select a Month
+            <select name="month"  onChange={handleChange} required>
+  <option value={defaultMonth} disabled selected >
+    {defaultMonth}
   </option>
   {months.map((month, index) => (
     <option key={index} value={month}>

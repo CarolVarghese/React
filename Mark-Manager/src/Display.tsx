@@ -7,6 +7,7 @@ import BarChart from "./DataChart"
 
 interface DisplayProps {
   onEditClick: (data: markDetailsModel) => void;
+  
 }
 
 
