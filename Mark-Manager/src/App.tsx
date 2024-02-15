@@ -72,7 +72,7 @@ function App() {
         "July", "August", "September", "October", "November", "December"
       ];
       
-      const defaultMonth = isEditing ? editingStudent.month : "Select a month" ;
+      const defaultMonth = isEditing ? editingStudent.month : null ;
       
   return (
 
@@ -83,7 +83,7 @@ function App() {
         <div className='formBox'>
             <label >Month</label>
            
-            <select name="month"  onChange={handleChange} required>
+            <select name="month"  value={defaultMonth} onChange={handleChange} required>
   <option value={defaultMonth} disabled selected >
     {defaultMonth}
   </option>

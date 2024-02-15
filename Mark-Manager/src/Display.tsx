@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import {markDetailsModel} from './App'
 import ReactPaginate from 'react-paginate';
 import BarChart from "./DataChart"
+import { Alert } from 'react-bootstrap';
 
 
 interface DisplayProps {
@@ -38,13 +39,25 @@ function Display(props: DisplayProps){
       "July", "August", "September", "October", "November", "December"
     ];
     
-    
+     const [isDialougeOpen, setDilougeOpen] = useState(false)
+      const [deleteKey, setDeleteKey] = useState<string>('')
 
      function deleteClick (key:string){
-      localStorage.removeItem(key);
+      setDilougeOpen(true);
+      setDeleteKey(key)
+      
+    }
+
+     function handleConfirm  ()  {
+      localStorage.removeItem(deleteKey);
       window.location.reload()
-     }
-   
+     };
+
+     const handleCancel = () => {
+       setDilougeOpen(false);
+     };
+
+     
     
      const renderData = () => {
       const keys = Object.keys(sortedData).length > 0 ? Object.keys(sortedData) : Object.keys(storedData);
@@ -67,7 +80,11 @@ function Display(props: DisplayProps){
             <td id='Mark'>{Number(storedData[key].malayalam)+Number(storedData[key].maths)+Number(storedData[key].english)}</td>
             </td>
             <td><button onClick={() => props.onEditClick(storedData[key])}>Edit</button></td>
-            <td><button onClick={() => deleteClick(storedData[key].name)}>Delete</button></td>
+            <td><button onClick={() => deleteClick(storedData[key].name)} >Delete</button>
+
+            
+            </td>
+            
           </tr>
         ));
      };
@@ -208,6 +225,12 @@ const handleSearch = () => {
              
             </tbody>
         </table>
+        {isDialougeOpen && (
+            <div id="myDialog">
+              <p>Are you sure you want to proceed?</p>
+              <button onClick={handleConfirm}>OK</button>
+              <button onClick={handleCancel}>Cancel</button>
+            </div>)}
       <div>
         <h3>Select number of rows</h3>
         <select value={itemsPerPage} onChange={handleChange}>
