@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import {Chart, ChartConfiguration} from "chart.js/auto";
-import { markDetailsModel } from "./App";
+
 
 interface BarChartProps {
   data: number[];

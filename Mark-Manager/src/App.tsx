@@ -1,5 +1,3 @@
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
 import './App.css'
 import { ChangeEvent, useRef, useState } from 'react';
 import Display from './Display';
@@ -79,11 +77,11 @@ function App() {
     <div>
         <h2>Enter Details</h2>
       <div className="container"> 
-        <form id="Form" onSubmit={handleSubmit} ref={formRef}>
+        <form id="Form" onSubmit={handleSubmit} ref={formRef} >
         <div className='formBox'>
             <label >Month</label>
            
-            <select name="month" onChange={handleChange}>
+            <select name="month" onChange={handleChange} required>
   <option value="" disabled selected hidden>
     Select a Month
   </option>
@@ -96,28 +94,28 @@ function App() {
           </div>
           <div className='formBox'>
             <label htmlFor="">Name</label>
-            <input type="text" name="name" placeholder="Full Name" onChange={handleChange} value={MarkDetails.name}/>
+            <input type="text" name="name" placeholder="Full Name" onChange={handleChange} value={MarkDetails.name} required/>
           </div>
           <div className='formBox'>
             <label htmlFor="">Roll Number</label>
-            <input type="number" name="rollno"  placeholder="Roll No." onChange={handleChange} value={MarkDetails.rollno}/>
+            <input type="number" name="rollno"  placeholder="Roll No." onChange={handleChange} value={MarkDetails.rollno} required/>
           </div>
           <div className='formBox'>
             <label htmlFor="">Attendence</label>
-            <input type="number" name="attendence" min='1' max='100'  placeholder="%" onChange={handleChange} value={MarkDetails.attendence}/>
+            <input type="number" name="attendence" min='1' max='100'  placeholder="%" onChange={handleChange} value={MarkDetails.attendence} required/>
           </div>
           <h3>Enter Marks</h3>
           <div className='formBox'>
             <label htmlFor="">Malayalam</label>
-            <input type="number" name="malayalam" placeholder="0" onChange={handleChange} value={MarkDetails.malayalam}/>
+            <input type="number" name="malayalam" placeholder="0" onChange={handleChange} value={MarkDetails.malayalam} required/>
           </div>
           <div className='formBox'>
             <label htmlFor="">Maths</label>
-            <input type="number" name="maths" placeholder="0" onChange={handleChange} value={MarkDetails.maths}/>
+            <input type="number" name="maths" placeholder="0" onChange={handleChange} value={MarkDetails.maths} required/>
           </div>
           <div className='formBox'>
             <label htmlFor="">English</label>
-            <input type="number" name="english" placeholder="0" onChange={handleChange} value={MarkDetails.english}/>
+            <input type="number" name="english" placeholder="0" onChange={handleChange} value={MarkDetails.english} required/>
           </div>
           
           <div>

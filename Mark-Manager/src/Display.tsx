@@ -1,5 +1,4 @@
 import './display.css'
-
 import { useState, useEffect } from 'react';
 import {markDetailsModel} from './App'
 import ReactPaginate from 'react-paginate';
@@ -38,35 +37,21 @@ function Display(props: DisplayProps){
       "July", "August", "September", "October", "November", "December"
     ];
     
-    const [pageNumber, setPageNumber] = useState(0);
-    const itemsPerPage = 5;
-    const pageCount = Math.ceil(Object.keys(storedData).length / itemsPerPage);
-    useEffect(() => {
-        readData();
-        
-      }, []);
-
-
-      const handlePageClick = (data: { selected: number }) => {
-        setPageNumber(data.selected);
-     };
+    
 
      function deleteClick (key:string){
       localStorage.removeItem(key);
       window.location.reload()
      }
-
-
-
-     
-
-    
+   
     
      const renderData = () => {
       const keys = Object.keys(sortedData).length > 0 ? Object.keys(sortedData) : Object.keys(storedData);
-        const start = pageNumber * itemsPerPage;
-        const end = start + itemsPerPage;
-        const slicedData = keys.slice(start, end);
+        const start = Number(pageNumber) * Number(itemsPerPage);
+        const end = Number(start) + Number(itemsPerPage);
+        const slicedData = keys.slice(start,end);
+        
+        
   
         return slicedData.map((key) => (
             <tr key={key}>
@@ -162,6 +147,32 @@ const handleSearch = () => {
   const localStorageData = Object.entries(localStorage).map(([key, value]) => JSON.parse(value));
   const namesArray: string[] = localStorageData.map((obj: { name: any; }) => obj.name);
   const marksArray: number[] = localStorageData.map((obj: { malayalam: any;}) => obj.malayalam);
+
+
+//>>>>Pagination 
+
+  const [pageNumber, setPageNumber] = useState(0);
+  const [itemsPerPage, setitemsPerPage] = useState(2);
+    
+    const pageCount = Math.ceil(Object.keys(storedData).length / itemsPerPage);
+    useEffect(() => {
+        readData();
+        
+      }, []);
+
+
+      const handlePageClick = (data: { selected: number }) => {
+        setPageNumber(data.selected);
+     };
+
+
+     function handleChange(e) {
+
+      setitemsPerPage(e.target.value); 
+      setPageNumber(0);
+      }
+//Pagination<<<
+
     return(                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
         <>
         <h2>Details</h2>
@@ -196,8 +207,16 @@ const handleSearch = () => {
              
             </tbody>
         </table>
+      <div>
+        <h3>Select number of rows</h3>
+        <select value={itemsPerPage} onChange={handleChange}>
 
-        
+            <option value={2}>2</option>
+            <option  value={4}>4</option>
+            <option  value={6}>6</option>
+
+        </select>
+      </div>
         <ReactPaginate
             previousLabel={'Previous'}
             nextLabel={'Next'}
