@@ -72,12 +72,12 @@ function Display(props: DisplayProps){
             <td><text>{storedData[key].month}</text></td>
             <td>{storedData[key].name}</td>
             <td>{storedData[key].rollno}</td>
-            <td>{storedData[key].attendence}</td>
+            <td>{storedData[key].attPercentage}%</td>
             <td>
             <td id='Mark'>{storedData[key].malayalam}</td>
             <td id='Mark'>{storedData[key].maths}</td>
             <td id='Mark'>{storedData[key].english}</td>
-            <td id='Mark'>{Number(storedData[key].malayalam)+Number(storedData[key].maths)+Number(storedData[key].english)}</td>
+            <td id='Mark'>{storedData[key].total}</td>
             </td>
             <td><button onClick={() => props.onEditClick(storedData[key])}>Edit</button></td>
             <td><button onClick={() => deleteClick(storedData[key].name)} >Delete</button>
@@ -94,6 +94,7 @@ function Display(props: DisplayProps){
     const [sortedColumn, setSortedColumn] = useState<string>('');
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
     const [sortedData, setSortedData] = useState<{ [key: string]: markDetailsModel }>({});
+    let [point,setPoint]=useState<Number>(0);
 
       const sortData = (column: string, direction: 'asc' | 'desc') => {
       const sorted = Object.keys(storedData).sort((a, b) => {
@@ -151,26 +152,28 @@ const handleSearch = () => {
   }
 
   const best = studentsWithinRange.reduce((prev, current) =>
-    ((prev.malayalam + prev.maths + prev.english) / 3) >
-    ((current.malayalam + current.maths + current.english) / 3)
+    ((prev.total) / 3)*0.15 + (prev.attPercentage*0.05)>
+    ((current.total) / 3)*0.15 +(current.attPercentage*0.05)
       ? prev
       : current
   );
-
+  
   setBestStudent(best);
+  setPoint(((Number(best.malayalam) +
+    Number(best.maths) + Number(best.english))/3)*0.15 +(best.attPercentage*0.05) )
 };
 
 
   
   const localStorageData = Object.entries(localStorage).map(([key, value]) => JSON.parse(value));
   const namesArray: string[] = localStorageData.map((obj: { name: any; }) => obj.name);
-  const marksArray: number[] = localStorageData.map((obj: { malayalam: any;}) => obj.malayalam);
+  const marksArray: number[] = localStorageData.map((obj: { total: any; attPercentage :any;}) => (((obj.total) / 3)*0.15 +(obj.attPercentage*0.05)));
 
 
 //>>>>Pagination 
 
   const [pageNumber, setPageNumber] = useState(0);
-  const [itemsPerPage, setitemsPerPage] = useState(2);
+  const [itemsPerPage, setitemsPerPage] = useState(6);
     
     const pageCount = Math.ceil(Object.keys(storedData).length / itemsPerPage);
     useEffect(() => {
@@ -227,8 +230,8 @@ const handleSearch = () => {
         </table>
         {isDialougeOpen && (
             <div id="myDialog">
-              <p>Are you sure you want to proceed?</p>
-              <button onClick={handleConfirm}>OK</button>
+              <p>Are you sure you want to delete?</p>
+              <button onClick={handleConfirm}>Yes</button>
               <button onClick={handleCancel}>Cancel</button>
             </div>)}
       <div className='container'>
@@ -257,7 +260,7 @@ const handleSearch = () => {
          />
 
          <div id="Search">
-         <h2>Select the brightest student</h2>
+         <h2>Select the best student</h2>
          <div>
         <label>Select start month:</label>
         <select value={startMonth} onChange={(e) => setStartMonth(e.target.value)}>
@@ -289,13 +292,14 @@ const handleSearch = () => {
       </div>
 
       <button onClick={handleSearch}>Search</button>
-
+          
       {bestStudent && (
         <div>
           <h3>Best Performing Student</h3>
           <p>Name: {bestStudent.name}</p>
-          <p>Average Marks: {(Number(bestStudent.malayalam) +
-           Number(bestStudent.maths) + Number(bestStudent.english))/3 }</p>
+          
+          <p>Total Points:{point.toFixed(2)} / 20</p>
+          <p>Total Points =marks/15 + attendence /5</p>
         </div>
       )}
       
