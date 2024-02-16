@@ -16,156 +16,142 @@ export  interface markDetailsModel {
   [key: string]: string | number;
 }
 
+const months = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
 
 function App() {
-   
-   
   
-     const [MarkDetails, setDetails] = useState<markDetailsModel>({
-      month:"",
-      name:"",
-      rollno:0,
-      workingDays: 0,
-      attendence:0,
-      attPercentage: 0,
-      malayalam:0,
-      maths:0,
-      english:0,
-      total:0
-     });
+  const [MarkDetails, setDetails] = useState<markDetailsModel>({
+  month:"",
+  name:"",
+  rollno:0,
+  workingDays: 0,
+  attendence:0,
+  attPercentage: 0,
+  malayalam:0,
+  maths:0,
+  english:0,
+  total:0
+  });
 
-     
-      const [isEditing, setIsEditing] = useState(false);
-      const [editingStudent, setEditingStudent] = useState<markDetailsModel | null>(null);
-
-
-     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const {name,value} = e.target;
-        setDetails((prev) => ({
-           ...prev, [name]: value,
-        }));
-     
-      };
-
-      const formRef = useRef<HTMLFormElement >(null);
-      const  handleSubmit = (e: React.FormEvent) => {
-          e.preventDefault();
-          
-          const Percentage=Number(((MarkDetails.attendence)/(MarkDetails.workingDays))*100);
-          MarkDetails.attPercentage=Number(Percentage.toFixed(2));
-          MarkDetails.total=((Number(MarkDetails.malayalam))+(Number(MarkDetails.maths))+(Number(MarkDetails.english)))
-          
-          if (isEditing && editingStudent) {
-
-            localStorage.setItem(editingStudent.name, JSON.stringify(MarkDetails));
-          } else {
-            localStorage.setItem(MarkDetails.name, JSON.stringify(MarkDetails));
-          }
-        
-          
-          formRef.current?.reset();
-          setIsEditing(false);
-          setEditingStudent(null);
-          window.location.reload()
-      };
+  const months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
   
 
-      const handleEditClick = (data: markDetailsModel) => {
-        
-        setIsEditing(true);
-        setEditingStudent(data);
-        setDetails(data);
-      };
+  const [isEditing, setIsEditing] = useState(false);                                    //Flag for Edit
+  const [editingStudent, setEditingStudent] = useState<markDetailsModel | null>(null);  //Obj for edit
 
-      const months = [
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-      ];
-      
-      const defaultMonth = isEditing ? editingStudent?.month :  MarkDetails.month ;
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {       //For filling out Form for edit.
+      const {name,value} = e.target;
+      setDetails((prev) => ({
+        ...prev, [name]: value,
+      }));
+  
+  };
+
+  const formRef = useRef<HTMLFormElement >(null);
+  const  handleSubmit = (e: React.FormEvent) => {                                         // Saving the obj to storage
+    e.preventDefault();
+    
+    const Percentage=Number(((MarkDetails.attendence)/(MarkDetails.workingDays))*100);
+    MarkDetails.attPercentage=Number(Percentage.toFixed(2));
+    MarkDetails.total=((Number(MarkDetails.malayalam))+(Number(MarkDetails.maths))+(Number(MarkDetails.english)))
+    
+    if (isEditing && editingStudent) {
+
+      localStorage.setItem(editingStudent.name, JSON.stringify(MarkDetails));
+    } else {
+      localStorage.setItem(MarkDetails.name, JSON.stringify(MarkDetails));
+    }
+    formRef.current?.reset();
+    setIsEditing(false);
+    setEditingStudent(null);
+    window.location.reload()
+  };
+  
+
+  const handleEditClick = (data: markDetailsModel) => {
+
+    setIsEditing(true);
+    setEditingStudent(data);
+    setDetails(data);
+  };
+  
+  const defaultMonth = isEditing ? editingStudent?.month :  MarkDetails.month ;       //for accessing the month value on edit
       
   return (
 
-    <div>
-      <h2>Enter Details</h2>
-      <div className="container"> 
-        <form id="Form" onSubmit={handleSubmit} ref={formRef} >
-          <div id="label">
-            <label >Month</label>
-          </div>
-          <div className='formBox'> 
-            <select name="month"  value={defaultMonth}  onChange={handleChange} required>
-              <option value={defaultMonth}  disabled selected >
-                {defaultMonth}
-              </option>
-              {months.map((month, index) => (
-                <option key={index} value={month}>
-                  {month}
+    // Form for Entering Student Details>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+      <div>
+        <h2>Enter Details</h2>
+        <div className="container"> 
+          <form id="Form" onSubmit={handleSubmit} ref={formRef} >
+            <div id="label"><label >Month</label></div>
+            <div className='formBox'> 
+              <select name="month"  value={defaultMonth}  onChange={handleChange} required>
+                <option value={defaultMonth}  disabled selected >
+                  {defaultMonth}
                 </option>
-              ))}
-            </select>
-          </div>
+                {months.map((month, index) => (
+                  <option key={index} value={month}>
+                    {month}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          <div id="label">
-            <label htmlFor="">Name</label>
-          </div>
-          <div className='formBox'>
-            <input type="text" name="name" placeholder="Full Name" onChange={handleChange} value={MarkDetails.name} required/>
-          </div>
+            <div id="label"><label htmlFor="">Name</label></div>
+            <div className='formBox'>
+              <input type="text" name="name" placeholder="Full Name" onChange={handleChange} value={MarkDetails.name} required/>
+            </div>
 
-          <div id="label">
-            <label htmlFor="">Roll Number</label>
-          </div>
-          <div className='formBox'>
-            <input type="number" name="rollno"  placeholder="Roll No." onChange={handleChange} value={MarkDetails.rollno} required/>
-          </div>
+            <div id="label"><label htmlFor="">Roll Number</label></div>
+            <div className='formBox'>
+              <input type="number" name="rollno"  placeholder="Roll No." onChange={handleChange} value={MarkDetails.rollno} required/>
+            </div>
 
-          <div id="label">
-            <label htmlFor="">Number of working days</label>
-          </div>
-          <div className='formBox'> 
-            <input type="number" name="workingDays" min='1' max='100'  onChange={handleChange} value={MarkDetails.workingDays} required/>
-          </div>
+            <div id="label"><label htmlFor="">Number of working days</label></div>
+            <div className='formBox'> 
+              <input type="number" name="workingDays" min='1' max='100'  onChange={handleChange} value={MarkDetails.workingDays} required/>
+            </div>
 
-          <div id="label">
-            <label htmlFor="">Attendence</label>
-          </div>
-          <div className='formBox'>
-            <input type="number" name="attendence" min='1' max='100'  placeholder="%" onChange={handleChange} value={MarkDetails.attendence} required/>
-          </div>
+            <div id="label"><label htmlFor="">Attendence</label></div>
+            <div className='formBox'>
+              <input type="number" name="attendence" min='1' max='100'  placeholder="%" onChange={handleChange} value={MarkDetails.attendence} required/>
+            </div>
 
-          <h3>Enter Marks</h3>
-          <div id='label'>
-            <label htmlFor="">Malayalam</label>
-          </div>
-          <div className='formBox '>
-            <input type="number" name="malayalam" placeholder="0" onChange={handleChange} value={MarkDetails.malayalam} required/>
-          </div>
+            <h3>Enter Marks</h3>
+            <div id='label'><label htmlFor="">Malayalam</label></div>
+            <div className='formBox '>
+              <input type="number" name="malayalam" placeholder="0" onChange={handleChange} value={MarkDetails.malayalam} required/>
+            </div>
 
-          <div id='label'>
-            <label htmlFor="">Maths</label>
-          </div>
-          <div className='formBox '>
-            <input type="number" name="maths" placeholder="0" onChange={handleChange} value={MarkDetails.maths} required/>
-          </div>
+            <div id='label'><label htmlFor="">Maths</label></div>
+            <div className='formBox '>
+              <input type="number" name="maths" placeholder="0" onChange={handleChange} value={MarkDetails.maths} required/>
+            </div>
 
-          <div id='label'>
-            <label htmlFor="">English</label>
-          </div>
-          <div className='formBox '>
-            <input id="mark" type="number" name="english" placeholder="0" onChange={handleChange} value={MarkDetails.english} required/>
-          </div>
-          
-          <div>
-          <button type='submit'>Submit</button>
-          </div>
-        </form>     
+            <div id='label'><label htmlFor="">English</label></div>
+            <div className='formBox '>
+              <input id="mark" type="number" name="english" placeholder="0" onChange={handleChange} value={MarkDetails.english} required/>
+            </div>
+            
+            <div><button type='submit'>Submit</button></div>
+          </form>     
+        </div>
+        <Display onEditClick={handleEditClick} />   
       </div>
-      <Display onEditClick={handleEditClick} />   
-    </div>
-        
+    //Form End<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<    
   );
 
 }
 
+export {months}
 export default App
+
