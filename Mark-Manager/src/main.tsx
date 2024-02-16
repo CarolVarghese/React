@@ -2,7 +2,8 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 
 import './index.css'
-import ParentComponent from './Parent.tsx';
+import App from './App.tsx';
+import SearchDisplay from './Search.tsx';
 
 
 
@@ -10,9 +11,9 @@ import ParentComponent from './Parent.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    
-   
-    <ParentComponent />
+    <App/>
+       
+    <SearchDisplay />
    
   </React.StrictMode>,
 )

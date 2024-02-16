@@ -17,7 +17,6 @@ export  interface markDetailsModel {
 }
 
 
-
 function App() {
    
    

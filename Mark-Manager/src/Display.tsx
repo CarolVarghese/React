@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import {markDetailsModel} from './App'
 import ReactPaginate from 'react-paginate';
 import BarChart from "./DataChart"
-import { Alert } from 'react-bootstrap';
+
 
 
 interface DisplayProps {
@@ -247,8 +247,6 @@ const handleSearch = () => {
         <ReactPaginate
             previousLabel={'Previous'}
             nextLabel={'Next'}
-
-            
             breakLabel={'...'}
             breakClassName={'break-me'}
             pageCount={pageCount}
