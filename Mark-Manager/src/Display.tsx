@@ -16,22 +16,31 @@ function Display(props: DisplayProps){
   /////Storing the data in local storage to "storedData">>>>>>>>>>>>>>>
 
   const [storedData , setStoredData] = useState<{ [key: string]: markDetailsModel }>({});
+  const [searchWord, setSearchWord] = useState('');
 
-  const readData = () => {
+  useEffect( () => {
     const localStorageData: { [key: string]: markDetailsModel } = {};
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (key) {
         const data = JSON.parse(localStorage.getItem(key) || '');
         {
+          if (data.name.toLowerCase().includes(searchWord.toLowerCase())) {
           localStorageData[key] = data;
+        }
         }
       }
     }
     setStoredData(localStorageData);
-  };
+  }, [searchWord]);
+  
   /////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<....<<<<<<<<<
   
+
+  const handleChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchWord(e.target.value);
+    
+  };
   /// Data rendering after slicing according to pagination>>>>>....>>>>>>>>>
 
   const renderData = () => {
@@ -66,9 +75,7 @@ function Display(props: DisplayProps){
   const [itemsPerPage, setitemsPerPage] = useState(6);
     
   const pageCount = Math.ceil(Object.keys(storedData).length / itemsPerPage);
-  useEffect(() => {
-      readData();  
-  }, []);
+  
 
   const handlePageClick = (data: { selected: number }) => {
       setPageNumber(data.selected);
@@ -151,9 +158,10 @@ function Display(props: DisplayProps){
   const [endMonth, setEndMonth] = useState<string>('');
   const [bestStudent, setBestStudent] = useState<markDetailsModel | null>(null);
   let [point,setPoint]=useState<Number>(0);
-  const localStorageData = Object.entries(localStorage).map(([value]) => JSON.parse(value));
+  const localStorageData = Object.entries(localStorage).map(([key, value]) => JSON.parse(value));
   const namesArray: string[] = localStorageData.map((obj: { name: any; }) => obj.name);
   const marksArray: number[] = localStorageData.map((obj: { total: any; attPercentage :any;}) => (((obj.total) / 3)*0.15 +(obj.attPercentage*0.05)));
+
 
   const handleSearch = () => {
     if (!startMonth || !endMonth) {
@@ -183,15 +191,17 @@ function Display(props: DisplayProps){
       Number(best.maths) + Number(best.english))/3)*0.15 +(best.attPercentage*0.05) )
   };
   
-  //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>...<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
+  
+    //>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
   
 
   return(                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
     <>
       <h2>Details</h2>
+      <label>Search for a student :</label>
 
+      <input type="text" value={searchWord} onChange={handleChangeSearch} />
       <table>
         <thead>
           <tr>
