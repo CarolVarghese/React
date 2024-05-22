@@ -1,25 +1,31 @@
 import './display.css'
 import { useState, useEffect } from 'react';
-import {markDetailsModel}  from './App'
+import {MarkDetailsModel}  from './App' 
+import Accordion from 'react-bootstrap/Accordion';
 import ReactPaginate from 'react-paginate';
 import BarChart from "./DataChart"
 import {months}  from './App'
-
-
+import "../node_modules/bootstrap/dist/css/bootstrap.css"
+import Button from 'react-bootstrap/Button';
+import Alert from 'react-bootstrap/Alert';
+import Form from 'react-bootstrap/Form';
+import Row from 'react-bootstrap/esm/Row';
+import { Col } from 'react-bootstrap';
+import InputGroup from 'react-bootstrap/InputGroup';
 interface DisplayProps {
-  onEditClick: (data: markDetailsModel) => void;
+  onEditClick: (data: MarkDetailsModel) => void;
   
 }
 
-function Display(props: DisplayProps){   
-   
+function Display(props: DisplayProps){
+
   /////Storing the data in local storage to "storedData">>>>>>>>>>>>>>>
 
-  const [storedData , setStoredData] = useState<{ [key: string]: markDetailsModel }>({});
+  const [storedData , setStoredData] = useState<{ [key: string]: MarkDetailsModel }>({});
   const [searchWord, setSearchWord] = useState('');
 
   useEffect( () => {
-    const localStorageData: { [key: string]: markDetailsModel } = {};
+    const localStorageData: { [key: string]: MarkDetailsModel } = {};
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (key) {
@@ -61,8 +67,8 @@ function Display(props: DisplayProps){
           <td id='Mark'>{storedData[key].english}</td>
           <td id='Mark'>{storedData[key].total}</td>
         </td>
-        <td><button onClick={() => props.onEditClick(storedData[key])}>Edit</button></td>
-        <td><button onClick={() => deleteClick(storedData[key].name)} >Delete</button></td>
+        <td><Button variant='primary' onClick={() => props.onEditClick(storedData[key])}>Edit</Button></td>
+        <td><Button variant="danger"  onClick={() => deleteClick(storedData[key].name)} >Delete</Button></td>
       </tr>
       ));
   };
@@ -90,7 +96,7 @@ function Display(props: DisplayProps){
   //Sorting <>>>>....>>>>>>>>>>>>>>>>>>>>>>>>>>......>>>>>>>>>>>>>>>
   const [sortedColumn, setSortedColumn] = useState<string>('');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
-  const [sortedData, setSortedData] = useState<{ [key: string]: markDetailsModel }>({});
+  const [sortedData, setSortedData] = useState<{ [key: string]: MarkDetailsModel }>({});
   
   const sortData = (column: string, direction: 'asc' | 'desc') => {
     const sorted = Object.keys(storedData).sort((a, b) => {
@@ -111,7 +117,7 @@ function Display(props: DisplayProps){
       }
     });
 
-    const sortedObject: { [key: string]: markDetailsModel } = {};
+    const sortedObject: { [key: string]: MarkDetailsModel } = {};
     sorted.forEach((key) => {
       sortedObject[key] = storedData[key];
     });
@@ -131,11 +137,11 @@ function Display(props: DisplayProps){
 
   //Warnig Dilouge for Delete>>>>>>>......>>>>>>>>>>....>>>>>>>
 
-  const [isDialougeOpen, setDilougeOpen] = useState(false)
+  const [Show, setShow] = useState(false)
   const [deleteKey, setDeleteKey] = useState<string>('')
-
+  
   function deleteClick (key:string){
-    setDilougeOpen(true);
+    setShow(true);
     setDeleteKey(key)
     
   }
@@ -146,7 +152,7 @@ function Display(props: DisplayProps){
   };
 
   const handleCancel = () => {
-      setDilougeOpen(false);
+      setShow(false);
   };
   //<<<<<<<<<<<<<<<<<<<<<<delete warning//
 
@@ -156,7 +162,7 @@ function Display(props: DisplayProps){
 
   const [startMonth, setStartMonth] = useState<string>('');
   const [endMonth, setEndMonth] = useState<string>('');
-  const [bestStudent, setBestStudent] = useState<markDetailsModel | null>(null);
+  const [bestStudent, setBestStudent] = useState<MarkDetailsModel | null>(null);
   let [point,setPoint]=useState<Number>(0);
   const localStorageData = Object.entries(localStorage).map(([key, value]) => JSON.parse(value));
   const namesArray: string[] = localStorageData.map((obj: { name: any; }) => obj.name);
@@ -198,11 +204,22 @@ function Display(props: DisplayProps){
 
   return(                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
     <>
-      <h2>Details</h2>
-      <label>Search for a student :</label>
+      <br />
+      <br /><br />
+      
+      
 
-      <input type="text" value={searchWord} onChange={handleChangeSearch} />
-      <table>
+      <InputGroup className="mb-3">
+        <Form.Control
+          placeholder="Search for a student"
+          aria-label="Search for a student"
+          aria-describedby="basic-addon2"
+          value={searchWord} onChange={handleChangeSearch}
+        />
+        </InputGroup>
+      
+
+      <table id="maxWidth" className="tablebg">
         <thead>
           <tr>
             <th rowSpan={2} onClick={() => handleClick('month')}>Month</th>
@@ -230,22 +247,58 @@ function Display(props: DisplayProps){
         </tbody>
       </table>
 
-      {isDialougeOpen && (
-        <div id="myDialog">
-          <p>Are you sure you want to delete?</p>
-          <button onClick={handleConfirm}>Yes</button>
-          <button onClick={handleCancel}>Cancel</button>
-        </div>
-      )}
+      
 
-      <div className='container'>
-        <h3>Select number of rows</h3>
-        <select value={itemsPerPage} onChange={handleChange}>
-          <option value={2}>2</option>
-          <option  value={4}>4</option>
-          <option  value={6}>6</option>
-        </select>
-      </div>
+      <Alert show={Show} variant="warning">
+        <Alert.Heading>Warning!!</Alert.Heading>
+        <p>
+        Are you sure you want to delete?
+        </p>
+        <Button variant='Danger' onClick={handleConfirm}>Yes</Button>
+        <Button variant="Warning" onClick={handleCancel}>Cancel</Button>
+  
+        <hr />
+        
+      </Alert>
+
+      
+
+<br />
+<h3 id="center">Select number of rows</h3>
+
+<div id="center">
+  <Form.Check
+   inline
+    type="radio"
+    id="radio1"
+    label="2"
+    name="itemsPerPage"
+    value={2}
+    checked={itemsPerPage === 2}
+    onChange={handleChange}
+  />
+  <Form.Check
+    inline
+    type="radio"
+    id="radio2"
+    label=" 4"
+    name="itemsPerPage"
+    value={4}
+    checked={itemsPerPage === 4}
+    onChange={handleChange}
+  />
+  <Form.Check
+    inline
+    type="radio"
+    id="radio3"
+    label="6"
+    name="itemsPerPage"
+    value={6}
+    checked={itemsPerPage === 6}
+    onChange={handleChange}
+  />
+  </div>
+
 
       <ReactPaginate
         previousLabel={'Previous'}
@@ -258,36 +311,42 @@ function Display(props: DisplayProps){
         onPageChange={handlePageClick}
         containerClassName={'pagination'}
         activeClassName={'active'}
-      />
+      /> 
 
       <div id="Search">
         <h2>Select the best student</h2>
-        <div>
-          <label>Select start month:</label>
-          <select value={startMonth} onChange={(e) => setStartMonth(e.target.value)}>
-            <option value="" disabled selected hidden>select start month</option>
-            {months.map((month, index) => (
-              <option key={index} value={month}>
-                {month}
-              </option>
-            ))}
 
-          </select>
-        </div>
+        <Row className="mb-3">
+        <Form.Group as={Col} className="mb-3" >
+          <Form.Select name="month"  value={startMonth}  onChange={(e) => setStartMonth(e.target.value)}>
+                <option value=""  disabled selected >
+                select start month
+                </option>
+                {months.map((month, index) => (
+                  <option key={index} value={month}>
+                    {month}
+                  </option>
+                ))}
+              </Form.Select>
+          </Form.Group>
 
-        <div>
-          <label>Select end month:</label>
-          <select value={endMonth} onChange={(e) => setEndMonth(e.target.value)}>
-            <option value="" disabled selected hidden>select end month</option>
-            {months.map((month, index) => (
-              <option key={index} value={month}>
-                {month}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <button onClick={handleSearch}>Search</button>      
+              
+          <Form.Group as={Col} className="mb-3" >
+          
+          <Form.Select name="month"  value={endMonth}  onChange={(e) => setEndMonth(e.target.value)}>
+                <option value=""  disabled selected >
+                Select end month
+                </option>
+                {months.map((month, index) => (
+                  <option key={index} value={month}>
+                    {month}
+                  </option>
+                ))}
+              </Form.Select>
+          </Form.Group>
+        </Row>
+        <Button  variant='success' type='submit' onClick={handleSearch}>Find</Button>
+              
         {bestStudent && (
           <div>
             <h3>Best Performing Student</h3>

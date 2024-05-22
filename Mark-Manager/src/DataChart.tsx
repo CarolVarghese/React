@@ -10,7 +10,7 @@ interface BarChartProps {
 const BarChart: React.FC<BarChartProps> = ({ data, labels}) => {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
-
+ 
   useEffect(()=> {
     if (chartRef.current) {
       const ctx = chartRef.current.getContext("2d");

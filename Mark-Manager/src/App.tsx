@@ -1,8 +1,15 @@
-import './App.css'
-import { ChangeEvent, useRef, useState } from 'react';
+import React, { ChangeEvent, useRef, useState, useEffect } from 'react';
+import './App.css';
 import Display from './Display';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import Accordion from 'react-bootstrap/Accordion';
+import { useAccordionButton } from 'react-bootstrap/AccordionButton';
+import Card from 'react-bootstrap/Card';
 
-export  interface markDetailsModel {
+export interface MarkDetailsModel {
   month: string;
   name: string;
   rollno: number;
@@ -12,7 +19,7 @@ export  interface markDetailsModel {
   malayalam: number;
   maths: number;
   english: number;
-  total:number;
+  total: number;
   [key: string]: string | number;
 }
 
@@ -21,137 +28,142 @@ const months = [
   "July", "August", "September", "October", "November", "December"
 ];
 
-function App() {
-  
-  const [MarkDetails, setDetails] = useState<markDetailsModel>({
-  month:"",
-  name:"",
-  rollno:0,
-  workingDays: 0,
-  attendence:0,
-  attPercentage: 0,
-  malayalam:0,
-  maths:0,
-  english:0,
-  total:0
+const App: React.FC = () => {
+  const [markDetails, setMarkDetails] = useState<MarkDetailsModel>({
+    month: "",
+    name: "",
+    rollno: 0,
+    workingDays: 0,
+    attendence: 0,
+    attPercentage: 0,
+    malayalam: 0,
+    maths: 0,
+    english: 0,
+    total: 0
   });
 
-  const months = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-  ];
-  
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingStudent, setEditingStudent] = useState<MarkDetailsModel | null>(null);
+  const [autocompleteOptions, setAutocompleteOptions] = useState<string[]>([]);
 
-  const [isEditing, setIsEditing] = useState(false);                                    //Flag for Edit
-  const [editingStudent, setEditingStudent] = useState<markDetailsModel | null>(null);  //Obj for edit
-
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {       //For filling out Form for edit.
-      const {name,value} = e.target;
-      setDetails((prev) => ({
-        ...prev, [name]: value,
-      }));
-  
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setMarkDetails((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const formRef = useRef<HTMLFormElement >(null);
-  const  handleSubmit = (e: React.FormEvent) => {                                         // Saving the obj to storage
+  const formRef = useRef<HTMLFormElement>(null);
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    const Percentage=Number(((MarkDetails.attendence)/(MarkDetails.workingDays))*100);
-    MarkDetails.attPercentage=Number(Percentage.toFixed(2));
-    MarkDetails.total=((Number(MarkDetails.malayalam))+(Number(MarkDetails.maths))+(Number(MarkDetails.english)))
-    
-    if (isEditing && editingStudent) {
+    const percentage = (markDetails.attendence / markDetails.workingDays) * 100;
+    markDetails.attPercentage = parseFloat(percentage.toFixed(2));
+    markDetails.total = markDetails.malayalam + markDetails.maths + markDetails.english;
 
-      localStorage.setItem(editingStudent.name, JSON.stringify(MarkDetails));
+    if (isEditing && editingStudent) {
+      localStorage.setItem(editingStudent.name, JSON.stringify(markDetails));
     } else {
-      localStorage.setItem(MarkDetails.name, JSON.stringify(MarkDetails));
+      localStorage.setItem(markDetails.name, JSON.stringify(markDetails));
     }
+
     formRef.current?.reset();
     setIsEditing(false);
     setEditingStudent(null);
-    window.location.reload()
+    window.location.reload();
   };
-  
 
-  const handleEditClick = (data: markDetailsModel) => {
-
+  const handleEditClick = (data: MarkDetailsModel) => {
     setIsEditing(true);
     setEditingStudent(data);
-    setDetails(data);
+    setMarkDetails(data);
   };
-  
-  const defaultMonth = isEditing ? editingStudent?.month :  MarkDetails.month ;       //for accessing the month value on edit
-      
+
+  const defaultMonth = isEditing ? editingStudent?.month : markDetails.month;
+
+  useEffect(() => {
+    const storedMarkDetails = localStorage.getItem('MarkDetails');
+    if (storedMarkDetails) {
+      const parsedMarkDetails: MarkDetailsModel[] = JSON.parse(storedMarkDetails);
+      const namesArray: string[] = parsedMarkDetails.map(details => details.name);
+      setAutocompleteOptions(namesArray);
+    }
+  }, []);
+
   return (
-
-    // Form for Entering Student Details>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-      <div>
-        <h2>Enter Details</h2>
-        <div className="container"> 
-          <form id="Form" onSubmit={handleSubmit} ref={formRef} >
-            <div id="label"><label >Month</label></div>
-            <div className='formBox'> 
-              <select name="month"  value={defaultMonth}  onChange={handleChange} required>
-                <option value={defaultMonth}  disabled selected >
-                  {defaultMonth}
-                </option>
+    <>
+          <div>
+        
+        
+        <div className="container">
+        <Accordion id="maxWidth">
+      <Accordion.Item eventKey="0">
+        <Accordion.Header>Enter Details</Accordion.Header>
+        <Accordion.Body>
+          <h2>Enter Details</h2>
+          <Form onSubmit={handleSubmit} ref={formRef} className="contact-form ">
+            <Form.Group className="form-field mb-3" controlId="exampleForm.ControlInput1">
+              
+              <Form.Select name="month" className="input-text" value={defaultMonth} onChange={handleChange} required>
+                <option value="" disabled selected>{defaultMonth || "Select Month"}</option>
                 {months.map((month, index) => (
-                  <option key={index} value={month}>
-                    {month}
-                  </option>
+                  <option key={index} value={month}>{month}</option>
                 ))}
-              </select>
+              </Form.Select>
+            </Form.Group>
+            <Row className="mb-3">
+              
+              <Form.Group as={Col} className="form-field mb-3" controlId="ControlNameInput1">
+              <Form.Label className="label" htmlFor="name">Name</Form.Label>
+                <Form.Control type="text" className="input-text" name="name" placeholder="Name" onChange={handleChange} value={markDetails.name} required />
+              </Form.Group>
+              <Form.Group as={Col} className="form-field mb-3" controlId="exampleForm.ControlInput1">
+                <Form.Label className="label" htmlFor="rollno">Roll Number</Form.Label>
+                <Form.Control type="number" className="input-text" name="rollno" placeholder="Roll Number" onChange={handleChange} value={markDetails.rollno} required />
+              </Form.Group>
+            </Row>
+            <Row>
+              <Form.Group as={Col} className="form-field mb-3" controlId="exampleForm.ControlInput1">
+                <Form.Label className="label" htmlFor="workingDays">Number of Working Days</Form.Label>
+                <Form.Control type="number" className="input-text" name="workingDays" min="1" max="31" onChange={handleChange} value={markDetails.workingDays} required />
+              </Form.Group>
+              <Form.Group as={Col} className="form-field mb-3" controlId="exampleForm.ControlInput1">
+                <Form.Label className="label" htmlFor="attendence">Attendance</Form.Label>
+                <Form.Control type="number" className="input-text" name="attendence" min="1" max="31" onChange={handleChange} value={markDetails.attendence} required />
+              </Form.Group>
+            </Row>
+            <Row>
+              <h3>Enter Marks</h3>
+              <Form.Group as={Col} className="form-field mb-3" controlId="exampleForm.ControlInput1">
+                <Form.Label className="label" htmlFor="malayalam">Malayalam</Form.Label>
+                <Form.Control type="number" className="input-text" name="malayalam" onChange={handleChange} value={markDetails.malayalam} required />
+              </Form.Group>
+              <Form.Group as={Col} className="form-field mb-3" controlId="exampleForm.ControlInput1">
+                <Form.Label className="label" htmlFor="maths">Maths</Form.Label>
+                <Form.Control type="number" className="input-text" name="maths" onChange={handleChange} value={markDetails.maths} required />
+              </Form.Group>
+              <Form.Group as={Col} className="form-field mb-3" controlId="exampleForm.ControlInput1">
+                <Form.Label className="label" htmlFor="english">English</Form.Label>
+                <Form.Control type="number" className="input-text" name="english" onChange={handleChange} value={markDetails.english} required />
+              </Form.Group>
+            </Row>
+            <div id="center">
+              <Button variant="primary" type="submit">Submit</Button>
             </div>
-
-            <div id="label"><label htmlFor="">Name</label></div>
-            <div className='formBox'>
-              <input type="text" name="name" placeholder="Full Name" onChange={handleChange} value={MarkDetails.name} required/>
-            </div>
-
-            <div id="label"><label htmlFor="">Roll Number</label></div>
-            <div className='formBox'>
-              <input type="number" name="rollno"  placeholder="Roll No." onChange={handleChange} value={MarkDetails.rollno} required/>
-            </div>
-
-            <div id="label"><label htmlFor="">Number of working days</label></div>
-            <div className='formBox'> 
-              <input type="number" name="workingDays" min='1' max='100'  onChange={handleChange} value={MarkDetails.workingDays} required/>
-            </div>
-
-            <div id="label"><label htmlFor="">Attendence</label></div>
-            <div className='formBox'>
-              <input type="number" name="attendence" min='1' max='100'  placeholder="%" onChange={handleChange} value={MarkDetails.attendence} required/>
-            </div>
-
-            <h3>Enter Marks</h3>
-            <div id='label'><label htmlFor="">Malayalam</label></div>
-            <div className='formBox '>
-              <input type="number" name="malayalam" placeholder="0" onChange={handleChange} value={MarkDetails.malayalam} required/>
-            </div>
-
-            <div id='label'><label htmlFor="">Maths</label></div>
-            <div className='formBox '>
-              <input type="number" name="maths" placeholder="0" onChange={handleChange} value={MarkDetails.maths} required/>
-            </div>
-
-            <div id='label'><label htmlFor="">English</label></div>
-            <div className='formBox '>
-              <input id="mark" type="number" name="english" placeholder="0" onChange={handleChange} value={MarkDetails.english} required/>
-            </div>
-            
-            <div><button type='submit'>Submit</button></div>
-          </form>     
+          </Form>
+          </Accordion.Body>
+      </Accordion.Item>
+    </Accordion>
         </div>
-        <Display onEditClick={handleEditClick} />   
+        <Display onEditClick={handleEditClick} />
       </div>
-    //Form End<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<    
+      
+      
+    </>
+    
   );
-
 }
 
-export {months}
-export default App
-
+export { months };
+export default App;

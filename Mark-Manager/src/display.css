@@ -17,6 +17,7 @@ h1,h2,h3{
     border-color: aquamarine;
     border-style: groove;
     text-align: center;
+    background: rgb(97, 129, 142);
 }
 
 select{
@@ -38,9 +39,10 @@ select{
     text-align: center;
   }
   #label{
-    width: 100%;
-    padding-left: 25%;
-    text-align: left;
+    width: 50%;
+   
+    text-align: center;
+    background-color: azure;
     
   }
   .mark{
@@ -50,4 +52,13 @@ select{
   #myDialog{
     text-align: end;
     
+  }
+
+  #maxWidth{
+    width: 100%;
+  }
+
+  .tablebg{
+    background: linear-gradient(to top,aquamarine,aquamarine);
+    border-radius: 10px;
   }
