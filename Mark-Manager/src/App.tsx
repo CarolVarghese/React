@@ -57,10 +57,10 @@ const App: React.FC = () => {
   const formRef = useRef<HTMLFormElement>(null);
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+  
     const percentage = (markDetails.attendence / markDetails.workingDays) * 100;
     markDetails.attPercentage = parseFloat(percentage.toFixed(2));
-    markDetails.total = markDetails.malayalam + markDetails.maths + markDetails.english;
+    markDetails.total = Number(markDetails.malayalam) + Number( markDetails.maths) +Number( markDetails.english);
 
     if (isEditing && editingStudent) {
       localStorage.setItem(editingStudent.name, JSON.stringify(markDetails));
