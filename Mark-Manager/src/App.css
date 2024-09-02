@@ -69,3 +69,22 @@ body {
   width: 200px;
   cursor: pointer;
 }
+
+
+.auth-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.auth-container h2 {
+  margin-bottom: 20px;
+}
+
+.auth-container .form-control {
+  margin-bottom: 10px;
+}
+
