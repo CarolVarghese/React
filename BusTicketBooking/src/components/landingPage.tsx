@@ -13,9 +13,11 @@ const LandingPage: React.FC = () => {
                     <p className='mt-4 text-xl text-green-600'>Your journey starts here</p>
                 </div>
                 <div className='mt-6 space-x-4'>
+                    <Link to="/signin">
                     <button className='bg-white text-green-600 py-2 px-4 rounded shadow-lg hover:bg-gray-100'>
                         Sign In
                     </button>
+                    </Link>
 
                     <Link to="/signup" >
                     <button className='bg-white text-green-600 py-2 px-4 rounded shadow-lg hover:bg-gray-100'>

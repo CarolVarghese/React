@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "uB+kFAZUMqWlMZG8HqiC3ALL+ZIWwUWNHTnZhW/mosk=",
+  "Source": "BusTicketBookingAPI",
+  "BasePath": "_content/BusTicketBookingAPI",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
